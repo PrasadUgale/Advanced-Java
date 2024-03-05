@@ -10,13 +10,18 @@ import java.util.Properties;
 public class JdbcUtil {
 	private static Properties properties = null;
 
+	//Prevents instantiation of JdbcUtil Class
 	private JdbcUtil() {
 	}
 
+	//Executed only once when the class is loaded
 	static {
 		FileInputStream fis = null;
 
+		//path to properties file where db realated data is specified [Modify as Required]
 		String fileInfo = ".\\jdbc.properties";
+
+		//loading the properties from jdbc.properties file
 		try {
 			fis = new FileInputStream(fileInfo);
 			if (fis != null) {
@@ -36,17 +41,16 @@ public class JdbcUtil {
 		}
 	}
 
+	//provide Connection object using driver manager and properties specified by user in jdbc.properties file
 	public static Connection getDBConection() throws IOException, SQLException {
-		
-		return DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("user"),
-				properties.getProperty("password"));
+		return DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("user"),properties.getProperty("password"));
 	}
-
+	
+	//close all the resourses used by util class to avoid resource leak
 	public static void cleanUpResources(ResultSet resultSet, Statement statement, Connection connection) {
 		
 		if (resultSet != null) {
 			try {
-				
 				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -54,7 +58,6 @@ public class JdbcUtil {
 		}
 		if (statement != null) {
 			try {
-				
 				statement.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -62,7 +65,6 @@ public class JdbcUtil {
 		}
 		if (connection != null) {
 			try {
-				
 				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
